@@ -1,7 +1,7 @@
 "use client";
-import { useState } from 'react';
-import connectWallet from '../utils/connect';
-import { UserData, UserSession } from '@stacks/connect';
+import { useState } from "react";
+import connectWallet from "../helpers/connect";
+import { UserData, UserSession } from "@stacks/connect";
 
 export default function Home() {
   const [userSession] = useState(new UserSession());
@@ -12,7 +12,7 @@ export default function Home() {
       await connectWallet(userSession);
       if (userSession.isUserSignedIn()) {
         const data = userSession.loadUserData();
-        setUserData(data); 
+        setUserData(data);
       }
     } catch (error) {
       console.error("Error connecting wallet:", error);
@@ -25,10 +25,20 @@ export default function Home() {
         <div className="mt-10 p-6 bg-gray-800 rounded-md w-full max-w-md text-left overflow-hidden">
           <h2 className="text-2xl font-bold mb-4">Profile Information</h2>
           <ul className="space-y-2">
-            <li className="truncate"><strong>App Private Key:</strong> {userData.appPrivateKey || 'N/A'}</li>
-            <li className="truncate"><strong>Hub Url:</strong> {userData.hubUrl || 'N/A'}</li>
-            <li className="truncate"><strong>ID Address:</strong> {userData.identityAddress || 'N/A'}</li>
-            <li className="truncate"><strong>Wallet Provider:</strong> {userData.profile.walletProvider || 'N/A'}</li>
+            <li className="truncate">
+              <strong>App Private Key:</strong>{" "}
+              {userData.appPrivateKey || "N/A"}
+            </li>
+            <li className="truncate">
+              <strong>Hub Url:</strong> {userData.hubUrl || "N/A"}
+            </li>
+            <li className="truncate">
+              <strong>ID Address:</strong> {userData.identityAddress || "N/A"}
+            </li>
+            <li className="truncate">
+              <strong>Wallet Provider:</strong>{" "}
+              {userData.profile.walletProvider || "N/A"}
+            </li>
           </ul>
         </div>
       ) : (
