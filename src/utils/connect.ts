@@ -1,18 +1,22 @@
 import { showConnect, UserSession } from '@stacks/connect';
 
-import userSession from "../app/page";
-const connectWallet = ( userinfo:UserSession ) => {
-    const userSession = new UserSession();
-
+const connectWallet = (userSession: UserSession): Promise<void> => {
+  return new Promise((resolve, reject) => {
     showConnect({
-        appDetails: {
-            name: 'APp', 
-            icon: 'next.svg',            
-        },
-        onFinish: () => { 
-            console.log(userinfo.loadUserData());
+      appDetails: {
+        name: 'My App',
+        icon: 'next.svg',
+      },
+      onFinish: () => {
+        console.log(userSession.loadUserData())
+        if (userSession.isUserSignedIn()) {
+          resolve(); 
+        } else {
+          reject('User is not signed in');
         }
+      },
     });
+  });
 };
 
 export default connectWallet;
