@@ -1,7 +1,7 @@
 "use client";
+import Wallet from 'sats-connect';
 import React, { useEffect, useState } from "react";
-import { Address, AddressPurpose, BitcoinNetworkType } from "sats-connect";
-import { useLocalStorage } from "@/hooks";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,11 +9,9 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import {
-  connectWallet,
-  disconnectWallet,
-  fetchBalance,
-} from "@/helpers/wallet";
+
+import ConnectWalletSats from "@/helpers/connect";
+import RuneBalance from "@/lib/RuneBalance";
 
 interface BalanceData {
   balance: string;
@@ -25,57 +23,67 @@ interface BalanceData {
 }
 
 const Home: React.FC = () => {
-  const network = BitcoinNetworkType.Mainnet;
-  const [addressInfo, setAddressInfo] = useLocalStorage<Address[]>(
-    "addresses",
-    []
-  );
-  const [balanceData, setBalanceData] = useState<BalanceData | null>(null);
+  const [isConnected, setIsConnected] = useState(false);
+  const [balance, setBalance] = useState<string | null>(null);
 
-  const isConnected = addressInfo.length > 0;
 
-  const stackAddressInfo = addressInfo.find(
-    (address) => address.purpose === AddressPurpose.Stacks
-  );
 
-  const stackAddress = stackAddressInfo?.address;
+  const handleConnect = async () => {
+    const data = await ConnectWalletSats();
+    
 
-  useEffect(() => {
-    if (stackAddress) {
-      fetchBalance(stackAddress, setBalanceData);
+    const response = await Wallet.request('getBalance', undefined);
+
+    if (response.status === 'success') {
+      setBalance(response.result.total)
+      console.log(response.result);
+      setIsConnected(true);
+    } else {
+      console.error(response.error);
     }
-  }, [stackAddress]);
+    
+  };
+
+  const handleDisconnect = () => {
+    setIsConnected(false);
+    setBalance(null);
+  };
 
   if (!isConnected) {
     return (
       <Card>
-        <CardHeader>Connected to {network}</CardHeader>
         <CardContent>Click the button to connect your wallet</CardContent>
         <CardFooter>
-          <Button onClick={() => connectWallet(network, setAddressInfo)}>
+          <Button onClick={handleConnect}>
             Connect
           </Button>
+          
         </CardFooter>
       </Card>
+      
+
     );
   }
-
-  return (
-    <div className="App flex justify-center items-center gap-4 flex-col">
-      {balanceData && (
+  else{
+    return (
+      <div className="App flex justify-center items-center gap-4 flex-col">
         <Card>
           <CardHeader>Balance Information</CardHeader>
-          <CardContent> Stx-Balance: {balanceData.balance}</CardContent>
+          <CardContent>Wallet-Balance: {balance}</CardContent>
           <Button
-            onClick={() => disconnectWallet(setAddressInfo, setBalanceData)}
+            onClick={handleDisconnect}
             variant="destructive"
           >
             Disconnect
           </Button>
+          <Button onClick={RuneBalance}>
+              RuneConnect
+            </Button>
         </Card>
-      )}
-    </div>
-  );
+      </div>
+    );
+  }
+  
 };
 
 export default Home;
