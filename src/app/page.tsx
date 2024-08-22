@@ -1,9 +1,9 @@
-import Main from "@/components/Main";
-
-export default function Home() {
+import React from 'react'
+import Home from '@/components/Main'
+const App = () => {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <Main />
-    </main>
-  );
+    <div><Home/></div>
+  )
 }
+
+export default App
