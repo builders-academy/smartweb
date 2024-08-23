@@ -42,7 +42,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { ThemeToggle } from "./theme-toggle";
 
-export default function Component() {
+export default function Home() {
   const { walletData, balances, isConnected, connectWallet, disconnectWallet } =
     useConnectWalletSats();
   const { toast } = useToast();
@@ -314,7 +314,7 @@ export default function Component() {
                     <AlertCircle className="h-4 w-4" />
                     <AlertTitle>No Runes</AlertTitle>
                     <AlertDescription>
-                      You currently don't have any Runes in your wallet.
+                      You currently do not have any Runes in your wallet.
                     </AlertDescription>
                   </Alert>
                 )}
