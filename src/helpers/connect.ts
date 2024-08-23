@@ -73,11 +73,11 @@ export const useConnectWalletSats = () => {
         btc: btc.status === "success" ? btc.result : "Failed to fetch balance",
         runes:
           runes.status === "success"
-            ? runes.result
+            ? runes.result.balances
             : "Failed to fetch balance  ",
         stx: stxBalance,
       };
-      console.log(newBalances);
+      console.log(newBalances.runes);
       setBalances(newBalances);
     } catch (error) {
       console.error("Error fetching balances:", error);
