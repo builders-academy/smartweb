@@ -1,9 +1,9 @@
 import React from "react";
-import Home from "@/components/Main";
+import Dashboard from "@/components/main/Dashboard";
 const App = () => {
   return (
     <div>
-      <Home />
+      <Dashboard />
     </div>
   );
 };

@@ -55,11 +55,13 @@ export const useConnectWalletSats = () => {
       let stxBalance = null;
       if (stackAddress) {
         const res = await fetch(
-          `https://api.mainnet.hiro.so/v2/accounts/${stackAddress}`
+          // `https://api.mainnet.hiro.so/v2/accounts/${stackAddress}`
+          "https://api.hiro.so/extended/v1/address/SP15GXS91AWJ4X5ZQNNE4DQ94MWVFMD3E6AA1SM36/balances"
         );
         if (res.ok) {
           const data = await res.json();
-          stxBalance = data.balance;
+          stxBalance = data;
+          console.log(stxBalance);
         } else {
           console.error(
             "Failed to fetch STX balance:",
@@ -77,7 +79,7 @@ export const useConnectWalletSats = () => {
             : "Failed to fetch balance  ",
         stx: stxBalance,
       };
-      console.log(newBalances.runes);
+      console.log(newBalances.stx);
       setBalances(newBalances);
     } catch (error) {
       console.error("Error fetching balances:", error);
