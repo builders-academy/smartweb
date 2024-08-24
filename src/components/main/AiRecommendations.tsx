@@ -32,9 +32,9 @@ export default function AiRecommendations() {
           <li className="flex items-start">
             <span className="font-semibold mr-2">3.</span>
             <span>
-              <strong>Market Trend:</strong> Bitcoin's recent price movement
-              suggests a potential bullish trend. Monitor closely for investment
-              opportunities.
+              <strong>Market Trend:</strong> Bitcoin&apos;s recent price
+              movement suggests a potential bullish trend. Monitor closely for
+              investment opportunities.
             </span>
           </li>
           <li className="flex items-start">
