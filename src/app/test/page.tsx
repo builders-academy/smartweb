@@ -170,6 +170,8 @@
 
 import React from "react";
 
-export const page = () => {
-  return <div>Test</div>;
+const page = () => {
+  return <div>test</div>;
 };
+
+export default page;
