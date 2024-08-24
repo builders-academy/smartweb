@@ -114,7 +114,7 @@ export default function Dashboard() {
               />
             </div>
             <div className="lg:col-span-1 space-y-4">
-              <AiRecommendations />
+              <AiRecommendations stxBalance={balances.stx} />
               <PerformanceInsights />
             </div>
           </motion.div>
