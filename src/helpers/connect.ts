@@ -56,7 +56,7 @@ export const useConnectWalletSats = () => {
       if (stackAddress) {
         const res = await fetch(
           // `https://api.mainnet.hiro.so/v2/accounts/${stackAddress}`
-          "https://api.hiro.so/extended/v1/address/SP15GXS91AWJ4X5ZQNNE4DQ94MWVFMD3E6AA1SM36/balances"
+          `https://api.hiro.so/extended/v1/address/${stackAddress}/balances`
         );
         if (res.ok) {
           const data = await res.json();
