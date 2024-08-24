@@ -62,9 +62,18 @@ export default function StxBalanceTable({ balances }: StxBalanceTableProps) {
           {Object.entries(balances.fungible_tokens).map(([token, data]) => (
             <TableRow key={token}>
               <TableCell>{token.split("::")[1]}</TableCell>
-              <TableCell>{data.balance}</TableCell>
-              <TableCell>{data.total_sent}</TableCell>
-              <TableCell>{data.total_received}</TableCell>
+              <TableCell>
+                {/* @ts-ignore */}
+                {data.balance}
+              </TableCell>
+              <TableCell>
+                {/* @ts-ignore */}
+                {data.total_sent}
+              </TableCell>
+              <TableCell>
+                {/* @ts-ignore */}
+                {data.total_received}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -83,9 +92,18 @@ export default function StxBalanceTable({ balances }: StxBalanceTableProps) {
           {Object.entries(balances.non_fungible_tokens).map(([token, data]) => (
             <TableRow key={token}>
               <TableCell>{token.split("::")[1]}</TableCell>
-              <TableCell>{data.count}</TableCell>
-              <TableCell>{data.total_sent}</TableCell>
-              <TableCell>{data.total_received}</TableCell>
+              <TableCell>
+                {/* @ts-ignore */}
+                {data.count}
+              </TableCell>
+              <TableCell>
+                {/* @ts-ignore */}
+                {data.total_sent}
+              </TableCell>
+              <TableCell>
+                {/* @ts-ignore */}
+                {data.total_received}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
