@@ -41,14 +41,18 @@ export default function Component() {
   useEffect(() => {
     const domNode = chatParent.current;
     if (domNode) {
-      domNode.scrollTop = domNode.scrollHeight;
+      domNode.scrollTop = domNode.scrollHeight; // Ensure the chat container's scroll is at the bottom
     }
   }, [messages]);
+
   const lastMessageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (lastMessageRef.current) {
-      lastMessageRef.current.scrollIntoView({ behavior: "smooth" });
+      lastMessageRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "end", // Make sure to scroll the last item fully into view
+      });
     }
   }, [messages]);
 
