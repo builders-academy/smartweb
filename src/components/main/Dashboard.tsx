@@ -1,12 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
-import { useConnectWalletSats } from "@/helpers/connect";
+import React from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle, BitcoinIcon, CoinsIcon, LayersIcon } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { motion } from "framer-motion";
-import Navigation from "./Navigation";
+import { useConnectWalletSats } from "@/helpers/connect";
 import WalletDataTable from "./WalletDataTable";
 import BalanceCard from "./BalanceCard";
 import SatsBalanceTable from "./SatsBalanceTable";
@@ -16,10 +15,15 @@ import AiRecommendations from "./AiRecommendations";
 import PerformanceInsights from "./PerformanceInsights";
 
 export default function Dashboard() {
-  const { walletData, balances, isConnected, connectWallet, disconnectWallet } =
+  const { walletData, balances, isConnected, connectWallet, fetchBalances } =
     useConnectWalletSats();
   const { toast } = useToast();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  React.useEffect(() => {
+    if (isConnected) {
+      fetchBalances();
+    }
+  }, [isConnected, fetchBalances]);
 
   const handleConnectWallet = async () => {
     try {
@@ -37,15 +41,6 @@ export default function Dashboard() {
     }
   };
 
-  const handleDisconnectWallet = () => {
-    disconnectWallet();
-    toast({
-      title: "Wallet Disconnected",
-      description: "Your wallet has been disconnected.",
-      variant: "destructive",
-    });
-  };
-
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     toast({
@@ -56,17 +51,17 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <Navigation
-        isConnected={isConnected}
-        handleConnectWallet={handleConnectWallet}
-        handleDisconnectWallet={handleDisconnectWallet}
-        isMenuOpen={isMenuOpen}
-        setIsMenuOpen={setIsMenuOpen}
-      />
-
       <main className="flex-1 p-4 lg:p-8">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold">Dashboard</h1>
+          {!isConnected && (
+            <button
+              onClick={handleConnectWallet}
+              className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+            >
+              Connect Wallet
+            </button>
+          )}
         </div>
 
         {!isConnected && (

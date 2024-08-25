@@ -5,7 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { BrainCircuitIcon, RefreshCcw } from "lucide-react";
-import { getAgentExecutor } from "@/ai/agents/assetEvaluation";
+import { swapAgent } from "@/ai/agents/swapAgent";
+import { liquidityAgent } from "@/ai/agents/liquidityAgent";
 
 interface AiRecommendationsProps {
   stxBalance: {
@@ -32,7 +33,8 @@ interface AiRecommendationsProps {
 }
 
 interface AgentResponse {
-  recommendations: string[];
+  swapRecommendations: string[];
+  liquidityRecommendations: string[];
 }
 
 export default function AiRecommendations({
@@ -48,18 +50,30 @@ export default function AiRecommendations({
     setIsLoading(true);
     setError(null);
     try {
-      const agentExecutor = await getAgentExecutor();
-      const response = await agentExecutor(
-        `I have the following assets:
-        ${JSON.stringify(stxBalance.stx)} STX, ${JSON.stringify(
+      const swapAgentExecutor = await swapAgent();
+      const liquidityAgentExecutor = await liquidityAgent();
+
+      const [swapResponse, liquidityResponse] = await Promise.all([
+        swapAgentExecutor(`I have the following assets:
+          ${JSON.stringify(stxBalance.stx)} STX, ${JSON.stringify(
           stxBalance.fungible_tokens
         )}, ${JSON.stringify(stxBalance.non_fungible_tokens)} 
-        Given my current assets and the swap options available on Alex, which swap would be the most beneficial for me to maximize my returns or achieve the best outcome based on the current market rates and swap fees?
-        Please provide a detailed analysis considering potential profit, fees, and any other factors that might affect the decision.`
-      );
-      setAgentResponse(response);
+          Given my current assets and the swap options available on Alex, which swap would be the most beneficial for me to maximize my returns or achieve the best outcome based on the current market rates and swap fees?
+          Please provide a detailed analysis considering potential profit, fees, and any other factors that might affect the decision.`),
+        liquidityAgentExecutor(`I have the following assets:
+          ${JSON.stringify(stxBalance.stx)} STX, ${JSON.stringify(
+          stxBalance.fungible_tokens
+        )}, ${JSON.stringify(stxBalance.non_fungible_tokens)} 
+          Given my current assets and the liquidity options available on Alex, what are the best liquidity provision strategies for me to maximize returns while minimizing risks?
+          Please provide a detailed analysis considering potential earnings, impermanent loss, and other relevant factors.`),
+      ]);
+
+      setAgentResponse({
+        swapRecommendations: swapResponse.recommendations,
+        liquidityRecommendations: liquidityResponse.recommendations,
+      });
     } catch (error) {
-      console.error("Error invoking agent:", error);
+      console.error("Error invoking agents:", error);
       setError(
         "An error occurred while fetching recommendations. Please try again."
       );
@@ -91,11 +105,24 @@ export default function AiRecommendations({
         ) : error ? (
           <div className="text-destructive">{error}</div>
         ) : agentResponse ? (
-          <ul className="list-disc pl-5 space-y-2">
-            {agentResponse.recommendations.map((recommendation, index) => (
-              <li key={index}>{recommendation}</li>
-            ))}
-          </ul>
+          <div>
+            <h3 className="font-semibold mb-2">Swap Recommendations:</h3>
+            <ul className="list-disc pl-5 space-y-2 mb-4">
+              {agentResponse.swapRecommendations.map(
+                (recommendation, index) => (
+                  <li key={`swap-${index}`}>{recommendation}</li>
+                )
+              )}
+            </ul>
+            <h3 className="font-semibold mb-2">Liquidity Recommendations:</h3>
+            <ul className="list-disc pl-5 space-y-2">
+              {agentResponse.liquidityRecommendations.map(
+                (recommendation, index) => (
+                  <li key={`liquidity-${index}`}>{recommendation}</li>
+                )
+              )}
+            </ul>
+          </div>
         ) : (
           <p>No recommendations yet. Click the button below to get insights.</p>
         )}
@@ -105,7 +132,9 @@ export default function AiRecommendations({
             disabled={isLoading}
             className="bg-primary text-primary-foreground hover:bg-primary/90"
           >
-            {isLoading ? "Getting Recommendations..." : "Get Recommendations"}
+            {isLoading
+              ? "Getting Recommendations..."
+              : "Get AI Recommendations"}
           </Button>
           {agentResponse && (
             <Button

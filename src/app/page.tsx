@@ -1,9 +1,10 @@
 import React from "react";
-import Dashboard from "@/components/main/Dashboard";
+
+import Chat from "@/components/main/Chat";
 const App = () => {
   return (
     <div>
-      <Dashboard />
+      <Chat />
     </div>
   );
 };

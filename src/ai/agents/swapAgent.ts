@@ -10,7 +10,7 @@ async function fetchAllSwaps() {
   return JSON.stringify(response);
 }
 
-export async function getAgentExecutor(
+export async function swapAgent(
   modelName: string = "gpt-4o"
 ): Promise<(input: string) => Promise<{ recommendations: string[] }>> {
   const llm = new ChatOpenAI({
@@ -25,13 +25,13 @@ export async function getAgentExecutor(
   const outputSchema = z.object({
     recommendations: z
       .array(z.string())
-      .describe("List of 5 recommendation points"),
+      .describe("List of 5 recommendation points for swapping in ALEX."),
   });
 
   const parser = StructuredOutputParser.fromZodSchema(outputSchema);
 
   const promptTemplate = ChatPromptTemplate.fromTemplate(`
-    You are SmartWallet AI, an intelligent assistant that provides insights about swap options. You should make informed decisions by analyzing the potential benefits, fees, and risks associated with each swap option.
+    You are Swapping analysis agent that provides insights about swap options. You should analyze the swapping functionality on the ALEX decentralized exchange, focusing on the user experience and transaction settings. Detail the process of selecting base and quoted tokens, adjusting slippage tolerance, and understanding liquidity provider fees. Evaluate the importance of transaction confirmation steps, including the overview of the swap route and final confirmation through smart contracts. Provide insights on the expected transaction times due to the reliance on Stacks smart contracts and Bitcoin block speeds, and suggest best practices for users to optimize their swapping experience while minimizing risks associated with slippage and transaction fees.
 
     Current user input: {input}
 
