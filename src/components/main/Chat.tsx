@@ -1,5 +1,5 @@
 "use client";
-
+import Message from "@/helpers/chatconversion";
 import { useState, useRef, useEffect } from "react";
 import { useChat } from "ai/react";
 import Link from "next/link";
@@ -43,7 +43,14 @@ export default function Component() {
     if (domNode) {
       domNode.scrollTop = domNode.scrollHeight;
     }
-  });
+  }, [messages]);
+  const lastMessageRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (lastMessageRef.current) {
+      lastMessageRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
 
   const handleConnectWallet = async () => {
     try {
@@ -123,12 +130,13 @@ export default function Component() {
       <CardContent className="p-4">
         <ScrollArea className="h-[400px] pr-4" ref={chatParent}>
           {isConnected ? (
-            messages.map((m) => (
+            messages.map((m, index) => (
               <div
                 key={m.id}
                 className={`flex ${
                   m.role === "user" ? "justify-end" : "justify-start"
                 } mb-4`}
+                ref={index === messages.length - 1 ? lastMessageRef : null} // Ref on the last message
               >
                 <div
                   className={`flex ${
@@ -152,7 +160,7 @@ export default function Component() {
                     }
                   >
                     <CardContent className="p-3">
-                      <p className="text-sm">{m.content}</p>
+                      <Message content={m.content} />
                     </CardContent>
                   </Card>
                 </div>
