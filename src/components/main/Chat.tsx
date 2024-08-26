@@ -125,10 +125,7 @@ export default function Component() {
             </Button>
           </div>
         ) : (
-          <Button variant="outline" size="sm" onClick={handleConnectWallet}>
-            <Wallet className="h-4 w-4 mr-2" />
-            Connect Wallet
-          </Button>
+          ""
         )}
       </CardHeader>
       <CardContent className="p-4">
