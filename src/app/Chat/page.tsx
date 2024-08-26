@@ -1,13 +1,11 @@
 import React from "react";
-
 import Chat from "@/components/main/Chat";
-import Connect from "@/components/main/Connect";
-const App = () => {
+const page = () => {
   return (
     <div>
-      <Connect />
+      <Chat />
     </div>
   );
 };
 
-export default App;
+export default page;

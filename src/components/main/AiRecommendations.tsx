@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -46,7 +46,7 @@ export default function AiRecommendations({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleAgentInvocation = async () => {
+  const fetchRecommendations = useCallback(async () => {
     setIsLoading(true);
     setError(null);
     try {
@@ -80,7 +80,11 @@ export default function AiRecommendations({
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [stxBalance]);
+
+  useEffect(() => {
+    fetchRecommendations();
+  }, [fetchRecommendations]);
 
   const handleReset = () => {
     setAgentResponse(null);
@@ -124,18 +128,9 @@ export default function AiRecommendations({
             </ul>
           </div>
         ) : (
-          <p>No recommendations yet. Click the button below to get insights.</p>
+          <p>No recommendations yet.</p>
         )}
         <div className="mt-4 flex space-x-2">
-          <Button
-            onClick={handleAgentInvocation}
-            disabled={isLoading}
-            className="bg-primary text-primary-foreground hover:bg-primary/90"
-          >
-            {isLoading
-              ? "Getting Recommendations..."
-              : "Get AI Recommendations"}
-          </Button>
           {agentResponse && (
             <Button
               onClick={handleReset}
