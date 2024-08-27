@@ -19,6 +19,7 @@ import RunesBalanceTable from "./RunesBalanceTable";
 import AiRecommendations from "./AiRecommendations";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface ModalProps {
   isOpen: boolean;
@@ -56,7 +57,6 @@ export default function Dashboard() {
     walletData,
     balances,
     isConnected,
-    connectWallet,
     disconnectWallet,
     aiRecommendations,
   } = useConnectWalletSats();
@@ -64,22 +64,7 @@ export default function Dashboard() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState<React.ReactNode>(null);
-
-  const handleConnectWallet = async () => {
-    try {
-      await connectWallet();
-      toast({
-        title: "Wallet Connected",
-        description: "Your wallet has been successfully connected.",
-      });
-    } catch (error) {
-      toast({
-        title: "Connection Failed",
-        description: "Failed to connect wallet. Please try again.",
-        variant: "destructive",
-      });
-    }
-  };
+  const router = useRouter();
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -96,6 +81,7 @@ export default function Dashboard() {
       description: "Your wallet has been disconnected.",
       variant: "destructive",
     });
+    router.push("/");
   };
 
   const openModal = (content: React.ReactNode) => {
@@ -114,29 +100,20 @@ export default function Dashboard() {
         <div className="flex justify-between items-center">
           <h1 className="text-4xl font-bold">Welcome to CryptoWallet</h1>
           <div className="flex gap-2">
-            {isConnected ? (
-              <div className="flex gap-2">
-                <Button
-                  onClick={handleDisconnectWallet}
-                  className="bg-red-600 text-white hover:bg-red-700"
-                >
-                  Disconnect
-                </Button>
-                <Link href="/Chat">
-                  <Button className="bg-gradient-to-r from-[rgb(247,147,26)] to-purple-700 hover:from-purple-700 hover:to-[rgb(247,147,26)] text-white flex gap-2">
-                    Get your Personal Assistant
-                    <MessageSquareIcon />
-                  </Button>
-                </Link>
-              </div>
-            ) : (
-              <button
-                onClick={handleConnectWallet}
-                className="px-4 py-2 bg-[rgb(247,147,26)] text-white rounded-md hover:bg-[rgb(250,170,40)] transition-colors"
+            <div className="flex gap-2">
+              <Button
+                onClick={handleDisconnectWallet}
+                className="bg-red-600 text-white hover:bg-red-700"
               >
-                Connect Wallet
-              </button>
-            )}
+                Disconnect
+              </Button>
+              <Link href="/Chat">
+                <Button className="bg-gradient-to-r from-[rgb(247,147,26)] to-purple-700 hover:from-purple-700 hover:to-[rgb(247,147,26)] text-white flex gap-2">
+                  Get your Personal Assistant
+                  <MessageSquareIcon />
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </header>

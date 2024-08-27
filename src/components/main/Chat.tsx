@@ -17,6 +17,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { LayoutDashboard, Wallet, Send } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useRouter } from "next/navigation";
 
 export default function Component() {
   const { messages, input, handleInputChange, handleSubmit, setInput } =
@@ -33,10 +34,10 @@ export default function Component() {
     });
   const chatParent = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
-  const { isConnected, connectWallet, disconnectWallet } =
-    useConnectWalletSats();
+  const { isConnected, disconnectWallet } = useConnectWalletSats();
 
   const [selectedPrompt, setSelectedPrompt] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
     const domNode = chatParent.current;
@@ -56,22 +57,6 @@ export default function Component() {
     }
   }, [messages]);
 
-  const handleConnectWallet = async () => {
-    try {
-      await connectWallet();
-      toast({
-        title: "Wallet Connected",
-        description: "Your wallet has been successfully connected.",
-      });
-    } catch (error) {
-      toast({
-        title: "Connection Failed",
-        description: "Failed to connect wallet. Please try again.",
-        variant: "destructive",
-      });
-    }
-  };
-
   const handleDisconnectWallet = () => {
     disconnectWallet();
     toast({
@@ -79,6 +64,7 @@ export default function Component() {
       description: "Your wallet has been disconnected.",
       variant: "destructive",
     });
+    router.push("/");
   };
 
   const existingPrompts = [
