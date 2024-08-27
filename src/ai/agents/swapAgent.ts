@@ -20,8 +20,6 @@ export async function swapAgent(
     streaming: true,
   });
 
-  console.log("Initializing SmartWallet AI");
-
   const outputSchema = z.object({
     recommendations: z
       .array(z.string())

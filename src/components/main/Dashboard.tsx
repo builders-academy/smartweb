@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState } from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
@@ -20,10 +19,14 @@ import RunesBalanceTable from "./RunesBalanceTable";
 import AiRecommendations from "./AiRecommendations";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { any } from "zod";
 
-// Modal component
-const Modal = ({ isOpen, onClose, children }: any) => {
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
+}
+
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
   if (!isOpen) return null;
 
   return (
@@ -31,7 +34,7 @@ const Modal = ({ isOpen, onClose, children }: any) => {
       <div
         className="bg-black text-white p-6 rounded-lg max-w-lg w-full"
         style={{
-          boxShadow: "0 0 20px 3px rgb(247 147 26)", // White glow effect
+          boxShadow: "0 0 20px 3px rgb(247 147 26)",
         }}
       >
         <div className="flex justify-end">
@@ -54,20 +57,13 @@ export default function Dashboard() {
     balances,
     isConnected,
     connectWallet,
-    fetchBalances,
     disconnectWallet,
+    aiRecommendations,
   } = useConnectWalletSats();
   const { toast } = useToast();
 
-  // State for modal
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalContent, setModalContent] = useState(null);
-
-  React.useEffect(() => {
-    if (isConnected) {
-      fetchBalances();
-    }
-  }, [isConnected, fetchBalances]);
+  const [modalContent, setModalContent] = useState<React.ReactNode>(null);
 
   const handleConnectWallet = async () => {
     try {
@@ -102,13 +98,11 @@ export default function Dashboard() {
     });
   };
 
-  // Function to open modal
-  const openModal = (content: any) => {
+  const openModal = (content: React.ReactNode) => {
     setModalContent(content);
     setIsModalOpen(true);
   };
 
-  // Function to close modal
   const closeModal = () => {
     setIsModalOpen(false);
     setModalContent(null);
@@ -116,7 +110,6 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {/* Hero Section */}
       <header className="p-4 lg:p-8 bg-gradient-to-r from-[rgb(247,147,26)] to-purple-700 text-white shadow-lg">
         <div className="flex justify-between items-center">
           <h1 className="text-4xl font-bold">Welcome to CryptoWallet</h1>
@@ -149,7 +142,6 @@ export default function Dashboard() {
       </header>
 
       <main className="flex-1 p-4 lg:p-8">
-        {/* Alert for when wallet is not connected */}
         {!isConnected && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -166,7 +158,6 @@ export default function Dashboard() {
           </motion.div>
         )}
 
-        {/* Summary Section */}
         {isConnected && (
           <div className="mb-8">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -208,7 +199,10 @@ export default function Dashboard() {
             className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8"
           >
             <div className="space-y-4">
-              {/* <AiRecommendations stxBalance={balances.stx} /> */}
+              <AiRecommendations
+                recommendations={aiRecommendations}
+                isLoading={false}
+              />
             </div>
 
             <div className="space-y-4">
@@ -220,7 +214,6 @@ export default function Dashboard() {
           </motion.div>
         )}
 
-        {/* Modal component */}
         <Modal isOpen={isModalOpen} onClose={closeModal}>
           {modalContent}
         </Modal>
