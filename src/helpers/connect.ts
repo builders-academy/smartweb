@@ -3,6 +3,7 @@ import Wallet, { AddressPurpose, request } from "sats-connect";
 import { useLocalStorage } from "@/hooks";
 import { swapAgent } from "@/ai/agents/swapAgent";
 import { liquidityAgent } from "@/ai/agents/liquidityAgent";
+import Cookies from "js-cookie";
 
 export const useConnectWalletSats = () => {
   const [walletData, setWalletData] = useLocalStorage<any[]>("walletData", []);
@@ -120,6 +121,10 @@ export const useConnectWalletSats = () => {
           await fetchAiRecommendations(newBalances.stx);
         }
         setIsInitialized(true);
+
+        // Set the wallet_connected cookie
+        Cookies.set("wallet_connected", "true", { expires: 1 }); // Expires in 1 day
+
         return { status: "success", result: data.result };
       } else {
         throw new Error("Failed to get wallet accounts");
@@ -136,9 +141,14 @@ export const useConnectWalletSats = () => {
     setBalances({});
     setAiRecommendations(null);
     setIsInitialized(false);
+
+    // Clear all relevant data from localStorage
     localStorage.removeItem("walletData");
     localStorage.removeItem("balances");
     localStorage.removeItem("aiRecommendations");
+
+    // Remove the wallet_connected cookie
+    Cookies.remove("wallet_connected");
   };
 
   useEffect(() => {
