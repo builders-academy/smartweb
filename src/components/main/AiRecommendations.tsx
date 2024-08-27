@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { BrainCircuitIcon, RefreshCcw } from "lucide-react";
+import { BrainCircuitIcon, RefreshCcw, Loader2 } from "lucide-react";
 import { swapAgent } from "@/ai/agents/swapAgent";
 import { liquidityAgent } from "@/ai/agents/liquidityAgent";
 
@@ -43,10 +43,13 @@ export default function AiRecommendations({
   const [agentResponse, setAgentResponse] = useState<AgentResponse | null>(
     null
   );
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [hasFetched, setHasFetched] = useState(false);
 
   const fetchRecommendations = useCallback(async () => {
+    if (hasFetched) return;
+
     setIsLoading(true);
     setError(null);
     try {
@@ -72,6 +75,7 @@ export default function AiRecommendations({
         swapRecommendations: swapResponse.recommendations,
         liquidityRecommendations: liquidityResponse.recommendations,
       });
+      setHasFetched(true);
     } catch (error) {
       console.error("Error invoking agents:", error);
       setError(
@@ -80,16 +84,11 @@ export default function AiRecommendations({
     } finally {
       setIsLoading(false);
     }
-  }, [stxBalance]);
+  }, [stxBalance, hasFetched]);
 
   useEffect(() => {
     fetchRecommendations();
   }, [fetchRecommendations]);
-
-  const handleReset = () => {
-    setAgentResponse(null);
-    setError(null);
-  };
 
   return (
     <Card className="bg-gradient-to-br from-primary/10 via-primary/5 to-background border-primary/20">
@@ -128,20 +127,8 @@ export default function AiRecommendations({
             </ul>
           </div>
         ) : (
-          <p>No recommendations yet.</p>
+          <p>No recommendations available.</p>
         )}
-        <div className="mt-4 flex space-x-2">
-          {agentResponse && (
-            <Button
-              onClick={handleReset}
-              variant="outline"
-              className="bg-background"
-            >
-              <RefreshCcw className="mr-2 h-4 w-4" />
-              Reset
-            </Button>
-          )}
-        </div>
       </CardContent>
     </Card>
   );
