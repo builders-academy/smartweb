@@ -136,6 +136,9 @@ export const useConnectWalletSats = () => {
     setBalances({});
     setAiRecommendations(null);
     setIsInitialized(false);
+    localStorage.removeItem("walletData");
+    localStorage.removeItem("balances");
+    localStorage.removeItem("aiRecommendations");
   };
 
   useEffect(() => {
