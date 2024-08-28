@@ -43,7 +43,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
         <div className="flex justify-end">
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-200"
+            className="text-black-400 hover:text-black-200"
           >
             &times;
           </button>
@@ -97,28 +97,29 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100">
-      <header className="p-4 lg:p-6 bg-gray-800 text-gray-100 shadow-lg border-b-2 border-gray-700">
+    <div className="min-h-screen bg-black-900 text-black-100">
+      <header className="p-4 lg:p-6 bg-gray-900 text-gray-100 shadow-lg border-b-2 border-gray-700">
         <div className="container mx-auto flex justify-between items-center">
-          <h1 className="text-3xl font-bold flex items-center">
-            <WalletIcon className="mr-2 h-8 w-8 text-gray-100" />
-            <span>
-              Crypto<span className="text-[rgb(247,147,26)]">Wallet</span>
+          <h1 className="text-3xl font-bold flex items-center font-poppins">
+            <WalletIcon className="mr-2 h-8 w-8 text-white-500" />
+            <span className="text-purple-500">
+              Smart
+              <span className="text-[rgb(247,147,26)]">Wallet</span>
             </span>
           </h1>
           <div className="flex gap-2">
             <Button
               onClick={handleDisconnectWallet}
-              className="bg-gray-700 text-gray-100 hover:bg-gray-600 transition-colors duration-300"
+              className="bg-purple-700 text-gray-100 hover:bg-purple-600 transition-colors duration-300 font-poppins"
             >
               Disconnect
             </Button>
             <Link href="/Chat">
               <Button
-                className={`bg-rgb(247,147,26) text-gray-900 hover:bg-rgb(127, 0, 255) hover:text-gray-100 flex gap-2 transition-colors duration-300`}
+                className={`bg-[rgb(247,147,26)] text-gray-900 hover:bg-purple-700 hover:text-gray-100 flex gap-2 transition-colors duration-300 font-poppins`}
               >
                 AI Assistant
-                <MessageSquareIcon className="w-5 h-5" />
+                <MessageSquareIcon className="w-5 h-5 text-purple-500" />
               </Button>
             </Link>
           </div>
@@ -132,12 +133,12 @@ export default function Dashboard() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <Alert className="bg-gray-800 text-gray-100 border-[rgb(247,147,26)] border-2">
+            <Alert className="bg-black-800 text-black-100 border-[rgb(247,147,26)] border-2">
               <AlertCircle className="h-5 w-5 text-[rgb(247,147,26)]" />
               <AlertTitle className="text-lg font-semibold">
                 Wallet not connected
               </AlertTitle>
-              <AlertDescription className="text-gray-300">
+              <AlertDescription className="text-black-300">
                 Connect your wallet to view your crypto assets and data.
               </AlertDescription>
             </Alert>
@@ -193,22 +194,6 @@ export default function Dashboard() {
                   copyToClipboard={copyToClipboard}
                 />
               </div>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5 }}
-                className="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700"
-              ></motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5 }}
-                className="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700"
-              ></motion.div>
             </div>
           </>
         )}

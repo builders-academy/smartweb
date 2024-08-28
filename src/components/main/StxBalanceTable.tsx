@@ -28,8 +28,7 @@ export default function StxBalanceTable({ balances }: StxBalanceTableProps) {
   }
 
   return (
-    <div className="space-y-4">
-      {/* STX balance tables */}{" "}
+    <div className="space-y-4 h-[600px] overflow-y-auto p-4">
       <Table>
         <TableHeader>
           <TableRow>
