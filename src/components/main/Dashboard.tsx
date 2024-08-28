@@ -7,6 +7,7 @@ import {
   CoinsIcon,
   LayersIcon,
   MessageSquareIcon,
+  WalletIcon,
 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { motion } from "framer-motion";
@@ -20,6 +21,7 @@ import AiRecommendations from "./AiRecommendations";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Chat from "@/components/main/Chat";
 
 interface ModalProps {
   isOpen: boolean;
@@ -95,100 +97,120 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <header className="p-4 lg:p-8 bg-gradient-to-r from-[rgb(247,147,26)] to-purple-700 text-white shadow-lg">
-        <div className="flex justify-between items-center">
-          <h1 className="text-4xl font-bold">Welcome to CryptoWallet</h1>
+    <div className="min-h-screen bg-gray-900 text-gray-100">
+      <header className="p-4 lg:p-6 bg-gray-800 text-gray-100 shadow-lg border-b-2 border-gray-700">
+        <div className="container mx-auto flex justify-between items-center">
+          <h1 className="text-3xl font-bold flex items-center">
+            <WalletIcon className="mr-2 h-8 w-8 text-gray-100" />
+            <span>
+              Crypto<span className="text-[rgb(247,147,26)]">Wallet</span>
+            </span>
+          </h1>
           <div className="flex gap-2">
-            <div className="flex gap-2">
+            <Button
+              onClick={handleDisconnectWallet}
+              className="bg-gray-700 text-gray-100 hover:bg-gray-600 transition-colors duration-300"
+            >
+              Disconnect
+            </Button>
+            <Link href="/Chat">
               <Button
-                onClick={handleDisconnectWallet}
-                className="bg-red-600 text-white hover:bg-red-700"
+                className={`bg-rgb(247,147,26) text-gray-900 hover:bg-rgb(127, 0, 255) hover:text-gray-100 flex gap-2 transition-colors duration-300`}
               >
-                Disconnect
+                AI Assistant
+                <MessageSquareIcon className="w-5 h-5" />
               </Button>
-              <Link href="/Chat">
-                <Button className="bg-gradient-to-r from-[rgb(247,147,26)] to-purple-700 hover:from-purple-700 hover:to-[rgb(247,147,26)] text-white flex gap-2">
-                  Get your Personal Assistant
-                  <MessageSquareIcon />
-                </Button>
-              </Link>
-            </div>
+            </Link>
           </div>
         </div>
       </header>
 
-      <main className="flex-1 p-4 lg:p-8">
+      <main className="container mx-auto p-4 lg:p-6">
         {!isConnected && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <Alert className="bg-purple-900 text-white">
-              <AlertCircle className="h-4 w-4 text-[rgb(247,147,26)]" />
-              <AlertTitle>Wallet not connected</AlertTitle>
-              <AlertDescription>
-                Please connect your wallet to view your balances and data.
+            <Alert className="bg-gray-800 text-gray-100 border-[rgb(247,147,26)] border-2">
+              <AlertCircle className="h-5 w-5 text-[rgb(247,147,26)]" />
+              <AlertTitle className="text-lg font-semibold">
+                Wallet not connected
+              </AlertTitle>
+              <AlertDescription className="text-gray-300">
+                Connect your wallet to view your crypto assets and data.
               </AlertDescription>
             </Alert>
           </motion.div>
         )}
 
         {isConnected && (
-          <div className="mb-8">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <BalanceCard
-                title="Sats Balance"
-                icon={
-                  <BitcoinIcon className="h-4 w-4 text-[rgb(247,147,26)]" />
-                }
-                content={<SatsBalanceTable balances={balances.btc} />}
-                onClick={() =>
-                  openModal(<SatsBalanceTable balances={balances.btc} />)
-                }
-              />
-              <BalanceCard
-                title="STX Balance"
-                icon={<CoinsIcon className="h-4 w-4 text-[rgb(247,147,26)]" />}
-                content={<StxBalanceTable balances={balances.stx} />}
-                onClick={() =>
-                  openModal(<StxBalanceTable balances={balances.stx} />)
-                }
-              />
-              <BalanceCard
-                title="Runes Balance"
-                icon={<LayersIcon className="h-4 w-4 text-[rgb(247,147,26)]" />}
-                content={<RunesBalanceTable balances={balances.runes} />}
-                onClick={() =>
-                  openModal(<RunesBalanceTable balances={balances.runes} />)
-                }
-              />
-            </div>
-          </div>
-        )}
+          <>
+            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-2 mb-8">
+              <div className="flex flex-col gap-4">
+                <div className="flex gap-3 flex-wrap">
+                  <BalanceCard
+                    title="Bitcoin Balance"
+                    icon={
+                      <BitcoinIcon className="h-6 w-6 text-[rgb(247,147,26)]" />
+                    }
+                    content=""
+                    onClick={() =>
+                      openModal(<SatsBalanceTable balances={balances.btc} />)
+                    }
+                  />
+                  <BalanceCard
+                    title="Stacks Balance"
+                    icon={
+                      <CoinsIcon className="h-6 w-6 text-[rgb(247,147,26)]" />
+                    }
+                    content=""
+                    onClick={() =>
+                      openModal(<StxBalanceTable balances={balances.stx} />)
+                    }
+                  />
+                  <BalanceCard
+                    title="Runes Balance"
+                    icon={
+                      <LayersIcon className="h-6 w-6 text-[rgb(247,147,26)]" />
+                    }
+                    content=""
+                    onClick={() =>
+                      openModal(<RunesBalanceTable balances={balances.runes} />)
+                    }
+                  />
+                </div>
 
-        {isConnected && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8"
-          >
-            <div className="space-y-4">
-              <AiRecommendations
-                recommendations={aiRecommendations}
-                isLoading={false}
-              />
+                <AiRecommendations
+                  recommendations={aiRecommendations}
+                  isLoading={false}
+                />
+              </div>
+              <div className="">
+                <Chat />
+                <WalletDataTable
+                  walletData={walletData}
+                  copyToClipboard={copyToClipboard}
+                />
+              </div>
             </div>
 
-            <div className="space-y-4">
-              <WalletDataTable
-                walletData={walletData}
-                copyToClipboard={copyToClipboard}
-              />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
+                className="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700"
+              ></motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5 }}
+                className="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700"
+              ></motion.div>
             </div>
-          </motion.div>
+          </>
         )}
 
         <Modal isOpen={isModalOpen} onClose={closeModal}>
