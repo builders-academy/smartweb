@@ -18,7 +18,9 @@ const AiRecommendations = ({
     return (
       <Card>
         <CardHeader>
-          <CardTitle>AI Recommendations</CardTitle>
+          <CardTitle className="text-2xl font-bold mb-4 text-[rgb(247,147,26)]">
+            AI Recommendations
+          </CardTitle>
           <CardDescription>Loading recommendations...</CardDescription>
         </CardHeader>
       </Card>
@@ -32,8 +34,12 @@ const AiRecommendations = ({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>AI Recommendations</CardTitle>
-        <CardDescription>Based on your current portfolio</CardDescription>
+        <CardTitle className="text-2xl font-bold mb-4 text-[rgb(247,147,26)]">
+          AI Recommendations
+        </CardTitle>
+        <CardDescription>
+          Based on your current portfolio Our Agent Advises you to:
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <h3 className="text-lg font-semibold mb-2">Swap Recommendations:</h3>

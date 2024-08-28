@@ -1,35 +1,31 @@
-import React, { MouseEventHandler, ReactElement } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import { ChevronDownIcon } from "lucide-react";
+import React from "react";
+import { ReactNode } from "react";
 
 interface BalanceCardProps {
   title: string;
-  icon: ReactElement;
-  content: ReactElement;
-  onClick: MouseEventHandler;
+  icon: ReactNode;
+  content: ReactNode;
+  onClick: () => void;
 }
 
-export default function BalanceCard({
+const BalanceCard: React.FC<BalanceCardProps> = ({
   title,
   icon,
   content,
   onClick,
-}: BalanceCardProps) {
+}) => {
   return (
-    <div className="..." onClick={onClick}>
-      <Collapsible>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">{title}</CardTitle>
-            {icon}
-          </CardHeader>
-        </Card>
-      </Collapsible>
+    <div
+      onClick={onClick}
+      className="cursor-pointer p-4 text-sm rounded-lg bg-gray-800 hover:bg-purple-500 transition-all duration-300 shadow-md hover:shadow-lg border border-gray-700 hover:border-gray-600"
+    >
+      <h3 className="text-xl font-semibold mb-1 flex items-center">
+        {icon}
+        <span className="ml-2">{title}</span>
+      </h3>
+      <div className="text-gray-300">{content}</div>
     </div>
   );
-}
+};
+
+export default BalanceCard;

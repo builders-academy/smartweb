@@ -90,29 +90,14 @@ export default function Component() {
   };
 
   return (
-    <Card className="w-full max-w-3xl mx-auto my-8">
+    <Card className="w-full max-w-3xl mx-auto ">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-2xl font-bold">DeFi AI Assistant</CardTitle>
-        {isConnected ? (
-          <div className="flex space-x-2">
-            <Link href="/dashboard" passHref>
-              <Button variant="outline" size="sm">
-                <LayoutDashboard className="h-4 w-4 mr-2" />
-                Dashboard
-              </Button>
-            </Link>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleDisconnectWallet}
-            >
-              <Wallet className="h-4 w-4 mr-2" />
-              Disconnect Wallet
-            </Button>
-          </div>
-        ) : (
-          ""
-        )}
+        <CardTitle
+          className="text-2xl font-bold mb-4 text-[rgb(247,147,26)]
+"
+        >
+          DeFi AI Assistant
+        </CardTitle>
       </CardHeader>
       <CardContent className="p-4">
         <ScrollArea className="h-[400px] pr-4" ref={chatParent}>

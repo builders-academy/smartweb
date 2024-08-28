@@ -23,7 +23,12 @@ export default function WalletDataTable({
   return (
     <Card className="overflow-hidden">
       <CardHeader>
-        <CardTitle>Wallet Addresses</CardTitle>
+        <CardTitle
+          className="              text-2xl font-bold mb-4 text-[rgb(247,147,26)]
+"
+        >
+          Wallet Addresses
+        </CardTitle>
       </CardHeader>
       <CardContent className="p-0">
         <div className="overflow-x-auto">
