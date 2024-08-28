@@ -18,6 +18,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { LayoutDashboard, Wallet, Send } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useRouter } from "next/navigation";
+import NetworkBackground from "@/helpers/ConnectBG";
 
 export default function Component() {
   const { messages, input, handleInputChange, handleSubmit, setInput } =

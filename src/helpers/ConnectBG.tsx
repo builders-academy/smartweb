@@ -71,7 +71,7 @@ export default function NetworkBackground() {
       });
 
       // Draw connections
-      ctx.strokeStyle = "rgba(0, 100, 255, 0.5)";
+      ctx.strokeStyle = "rgb(247,147,26)";
       ctx.lineWidth = 0.5;
       for (let i = 0; i < pointsRef.current.length; i++) {
         for (let j = i + 1; j < pointsRef.current.length; j++) {
@@ -88,7 +88,7 @@ export default function NetworkBackground() {
         }
       }
 
-      ctx.fillStyle = "rgba(0, 100, 255, 0.8)";
+      ctx.fillStyle = "purple";
       pointsRef.current.forEach((point) => {
         ctx.beginPath();
         ctx.arc(point.x, point.y, 2, 0, Math.PI * 2);
