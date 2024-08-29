@@ -33,7 +33,7 @@ export const useConnectWalletSats = () => {
         let stxBalance = null;
         if (stackAddress) {
           const res = await fetch(
-            `https://api.hiro.so/extended/v1/address/${stackAddress}}/balances`
+            `https://api.hiro.so/extended/v1/address/SP15GXS91AWJ4X5ZQNNE4DQ94MWVFMD3E6AA1SM36/balances`
           );
           if (res.ok) {
             const data = await res.json();

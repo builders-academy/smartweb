@@ -102,26 +102,47 @@ export default function Dashboard() {
         <div className="container mx-auto flex justify-between items-center">
           <h1 className="text-3xl font-bold flex items-center font-poppins">
             <WalletIcon className="mr-2 h-8 w-8 text-white-500" />
-            <span className="text-purple-500">
-              Smart
-              <span className="text-[rgb(247,147,26)]">Wallet</span>
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500">
+              SMART
+              <span className="text-[rgb(247,147,26)]">WALLET</span>
             </span>
           </h1>
+
           <div className="flex gap-2">
+            <div className="flex gap-3">
+              <BalanceCard
+                title="BitCoin Holdings"
+                icon={
+                  <BitcoinIcon className="h-4 w-6 text-[rgb(247,147,26)]" />
+                }
+                content=""
+                onClick={() =>
+                  openModal(<SatsBalanceTable balances={balances.btc} />)
+                }
+              />
+              <BalanceCard
+                title="STX Balance"
+                icon={<CoinsIcon className="h-4 w-6 text-[rgb(247,147,26)]" />}
+                content=""
+                onClick={() =>
+                  openModal(<StxBalanceTable balances={balances.stx} />)
+                }
+              />
+              <BalanceCard
+                title="Runes Balance"
+                icon={<LayersIcon className="h-4 w-6 text-[rgb(247,147,26)]" />}
+                content=""
+                onClick={() =>
+                  openModal(<RunesBalanceTable balances={balances.runes} />)
+                }
+              />
+            </div>
             <Button
               onClick={handleDisconnectWallet}
               className="bg-purple-700 text-gray-100 hover:bg-purple-600 transition-colors duration-300 font-poppins"
             >
               Disconnect
             </Button>
-            <Link href="/Chat">
-              <Button
-                className={`bg-[rgb(247,147,26)] text-gray-900 hover:bg-purple-700 hover:text-gray-100 flex gap-2 transition-colors duration-300 font-poppins`}
-              >
-                AI Assistant
-                <MessageSquareIcon className="w-5 h-5 text-purple-500" />
-              </Button>
-            </Link>
           </div>
         </div>
       </header>
@@ -149,49 +170,21 @@ export default function Dashboard() {
           <>
             <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-2 mb-8">
               <div className="flex flex-col gap-4">
-                <div className="flex gap-3 flex-wrap">
-                  <BalanceCard
-                    title="Bitcoin Balance"
-                    icon={
-                      <BitcoinIcon className="h-6 w-6 text-[rgb(247,147,26)]" />
-                    }
-                    content=""
-                    onClick={() =>
-                      openModal(<SatsBalanceTable balances={balances.btc} />)
-                    }
-                  />
-                  <BalanceCard
-                    title="Stacks Balance"
-                    icon={
-                      <CoinsIcon className="h-6 w-6 text-[rgb(247,147,26)]" />
-                    }
-                    content=""
-                    onClick={() =>
-                      openModal(<StxBalanceTable balances={balances.stx} />)
-                    }
-                  />
-                  <BalanceCard
-                    title="Runes Balance"
-                    icon={
-                      <LayersIcon className="h-6 w-6 text-[rgb(247,147,26)]" />
-                    }
-                    content=""
-                    onClick={() =>
-                      openModal(<RunesBalanceTable balances={balances.runes} />)
-                    }
-                  />
+                <div>
+                  <div>
+                    <WalletDataTable
+                      walletData={walletData}
+                      copyToClipboard={copyToClipboard}
+                    />
+                  </div>
                 </div>
 
+                <Chat />
+              </div>
+              <div className="">
                 <AiRecommendations
                   recommendations={aiRecommendations}
                   isLoading={false}
-                />
-              </div>
-              <div className="">
-                <Chat />
-                <WalletDataTable
-                  walletData={walletData}
-                  copyToClipboard={copyToClipboard}
                 />
               </div>
             </div>

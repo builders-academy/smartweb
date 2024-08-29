@@ -93,15 +93,15 @@ export default function Component() {
   return (
     <Card className="w-full max-w-3xl mx-auto ">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle
-          className="text-2xl font-bold mb-4 text-[rgb(247,147,26)]
-"
-        >
-          DeFi AI Assistant
+        <CardTitle className="mb-4">
+          <div className="text-2xl font-bold mb-4 text-[rgb(247,147,26)]">
+            Ask Any Questions You want to!!
+          </div>
+          <div className="text-white]">to our AI Assistant</div>
         </CardTitle>
       </CardHeader>
-      <CardContent className="p-4">
-        <ScrollArea className="h-[400px] pr-4" ref={chatParent}>
+      <CardContent className="p-0">
+        <ScrollArea className="h-[300px] pr-4" ref={chatParent}>
           {isConnected ? (
             messages.map((m, index) => (
               <div

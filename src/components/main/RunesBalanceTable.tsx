@@ -34,13 +34,15 @@ export default function RunesBalanceTable({
   }
 
   return (
-    <div className="overflow-x-auto max-h-[500px] overflow-y-auto">
-      <Table>
-        <TableHeader>
+    <div className="overflow-x-auto max-h-[500px] overflow-y-auto bg-black text-gray-200 p-4 rounded-lg">
+      <Table className="w-full border border-gray-700 rounded-lg overflow-hidden">
+        <TableHeader className="bg-[rgb(247,147,26)]">
           <TableRow>
-            <TableHead>Rune Name</TableHead>
-            <TableHead>Symbol</TableHead>
-            <TableHead className="text-right">Amount</TableHead>
+            <TableHead className="font-bold text-white">Rune Name</TableHead>
+            <TableHead className="font-bold text-white">Symbol</TableHead>
+            <TableHead className="font-bold text-white text-right">
+              Amount
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -67,7 +69,10 @@ export default function RunesBalanceTable({
               },
               index: React.Key | null | undefined
             ) => (
-              <TableRow key={index}>
+              <TableRow
+                key={index}
+                className="hover:bg-gray-800 transition-colors"
+              >
                 <TableCell className="font-medium">{rune.runeName}</TableCell>
                 <TableCell>{rune.symbol || "N/A"}</TableCell>
                 <TableCell className="text-right">
