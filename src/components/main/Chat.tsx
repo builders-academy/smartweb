@@ -148,7 +148,7 @@ export default function Component() {
           )}
         </ScrollArea>
         {isConnected && (
-          <div className="mt-4">
+          <div className="mt-4 p-5">
             <div className="flex flex-wrap gap-2">
               {existingPrompts.map((prompt, index) => (
                 <Button
@@ -167,7 +167,7 @@ export default function Component() {
       <CardFooter>
         <form
           onSubmit={handleFormSubmit}
-          className="flex w-full items-center space-x-2"
+          className="flex w-full items-center space-x-2 my-2"
         >
           <Input
             placeholder="Ask about DeFi..."

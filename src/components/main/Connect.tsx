@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useConnectWalletSats } from "@/helpers/connect";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
-import { Wallet } from "lucide-react";
 import Link from "next/link";
 
 export default function Component() {
@@ -26,11 +25,11 @@ export default function Component() {
   const handleConnectWallet = async () => {
     try {
       await connectWallet();
+      router.push("/dashboard");
       toast({
         title: "Wallet Connected",
         description: "Your wallet has been successfully connected.",
       });
-      router.push("/dashboard");
     } catch (error) {
       toast({
         title: "Connection Failed",
@@ -46,7 +45,7 @@ export default function Component() {
 
       <div className="z-10 text-center">
         <h1 className="text-4xl font-bold text-white mb-8">
-          Welcome to CryptoWallet
+          Welcome to SmartWallet
         </h1>
         {isConnected ? (
           <Link href={"/dashboard"}>
