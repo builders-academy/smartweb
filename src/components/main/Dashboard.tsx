@@ -22,6 +22,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Chat from "@/components/main/Chat";
+import ImageGrid from "@/components/main/ImageGrid";
 
 interface ModalProps {
   isOpen: boolean;
@@ -178,7 +179,7 @@ export default function Dashboard() {
                     />
                   </div>
                 </div>
-
+                <ImageGrid />
                 <Chat />
               </div>
               <div className="">
