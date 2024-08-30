@@ -1,6 +1,6 @@
-# iSmartWallet
+# SmartWallet
 
-iSmartWallet is an AI-powered wallet application designed to help Bitcoin ecosystem newcomers make informed investment decisions. The app provides personalized recommendations based on the STX balance and tokens held by the account holder, focusing exclusively on Bitcoin-related opportunities.
+SmartWallet is an AI-powered wallet application designed to help Bitcoin ecosystem newcomers make informed investment decisions. The app provides personalized recommendations based on the STX balance and tokens held by the account holder, focusing exclusively on Bitcoin-related opportunities.
 
 ## Features
 
