@@ -61,21 +61,23 @@ const ImageGrid: React.FC = () => {
   ];
 
   return (
-    <div className="grid grid-cols-4 gap-2">
-      {images.map((image) => (
-        <a
-          href={image.link}
-          key={image.id}
-          className="relative group flex items-center justify-center w-20 h-20"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img src={image.src} alt={image.alt} className="w-20 max-h-20" />
-          <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-70 text-white text-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            {image.popupText}
-          </div>
-        </a>
-      ))}
+    <div className="">
+      <div className="grid grid-cols-4 gap-2 justify-items-center">
+        {images.map((image) => (
+          <a
+            href={image.link}
+            key={image.id}
+            className="relative group flex items-center justify-center w-20 h-20"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img src={image.src} alt={image.alt} className="w-20 max-h-20" />
+            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-70 text-white text-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              {image.popupText}
+            </div>
+          </a>
+        ))}
+      </div>
     </div>
   );
 };

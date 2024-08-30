@@ -23,7 +23,7 @@ export default function StxBalanceTable({ balances }: StxBalanceTableProps) {
 
   // Helper function to format balance by dividing by 100,000
   const formatBalance = (value: number | undefined) => {
-    return value ? (value / 100000).toFixed(2) : "0.00";
+    return value ? (value / 1000000).toFixed(2) : "0.00";
   };
 
   return (
