@@ -1,12 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   AlertCircle,
   BitcoinIcon,
   CoinsIcon,
   LayersIcon,
-  MessageSquareIcon,
   WalletIcon,
 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
@@ -19,7 +18,6 @@ import StxBalanceTable from "./StxBalanceTable";
 import RunesBalanceTable from "./RunesBalanceTable";
 import AiRecommendations from "./AiRecommendations";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Chat from "@/components/main/Chat";
 import ImageGrid from "@/components/main/ImageGrid";
@@ -62,11 +60,14 @@ export default function Dashboard() {
     isConnected,
     disconnectWallet,
     aiRecommendations,
+    fetchAiRecommendations,
   } = useConnectWalletSats();
   const { toast } = useToast();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState<React.ReactNode>(null);
+  const [isLoadingRecommendations, setIsLoadingRecommendations] =
+    useState(false);
   const router = useRouter();
 
   const copyToClipboard = (text: string) => {
@@ -96,6 +97,22 @@ export default function Dashboard() {
     setIsModalOpen(false);
     setModalContent(null);
   };
+
+  useEffect(() => {
+    const fetchRecommendations = async () => {
+      if (isConnected && !aiRecommendations) {
+        setIsLoadingRecommendations(true);
+        await fetchAiRecommendations();
+        setIsLoadingRecommendations(false);
+        toast({
+          title: "AI Recommendations Updated",
+          description: "Your AI recommendations have been fetched and updated.",
+        });
+      }
+    };
+
+    fetchRecommendations();
+  }, [isConnected, aiRecommendations, fetchAiRecommendations]);
 
   return (
     <div className="min-h-screen bg-black-900 text-black-100">
@@ -185,7 +202,7 @@ export default function Dashboard() {
               <div className="">
                 <AiRecommendations
                   recommendations={aiRecommendations}
-                  isLoading={false}
+                  isLoading={isLoadingRecommendations}
                 />
               </div>
             </div>

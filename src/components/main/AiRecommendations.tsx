@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import {
   Card,
@@ -6,12 +7,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import ReactMarkdown from "react-markdown";
 
 const AiRecommendations = ({
   recommendations,
   isLoading,
 }: {
-  recommendations: any;
+  recommendations: {
+    swapRecommendations: string | string[];
+    liquidityRecommendations: string | string[];
+  } | null;
   isLoading: boolean;
 }) => {
   if (isLoading) {
@@ -31,6 +36,13 @@ const AiRecommendations = ({
     return null;
   }
 
+  const formatRecommendations = (recs: string | string[]): string => {
+    if (typeof recs === "string") {
+      return recs;
+    }
+    return recs.join("\n\n");
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -43,11 +55,19 @@ const AiRecommendations = ({
       </CardHeader>
       <CardContent>
         <h3 className="text-lg font-semibold mb-2">Swap Recommendations:</h3>
-        <p>{recommendations.swapRecommendations}</p>
+        <div className="prose dark:prose-invert">
+          <ReactMarkdown>
+            {formatRecommendations(recommendations.swapRecommendations)}
+          </ReactMarkdown>
+        </div>
         <h3 className="text-lg font-semibold mt-4 mb-2">
           Liquidity Recommendations:
         </h3>
-        <p>{recommendations.liquidityRecommendations}</p>
+        <div className="prose dark:prose-invert">
+          <ReactMarkdown>
+            {formatRecommendations(recommendations.liquidityRecommendations)}
+          </ReactMarkdown>
+        </div>
       </CardContent>
     </Card>
   );

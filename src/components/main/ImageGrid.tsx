@@ -26,7 +26,7 @@ const ImageGrid: React.FC = () => {
     {
       id: 4,
       link: "https://www.lorenzo-protocol.xyz",
-      src: "Lorenzo.png",
+      src: "lorenzo.png",
       alt: "Image 4",
       popupText: "Lorenzo",
     },

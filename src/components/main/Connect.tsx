@@ -9,18 +9,8 @@ import Link from "next/link";
 
 export default function Component() {
   const { toast } = useToast();
-  const { isConnected, connectWallet, disconnectWallet } =
-    useConnectWalletSats();
+  const { isConnected, connectWallet } = useConnectWalletSats();
   const router = useRouter();
-
-  const handleDisconnectWallet = () => {
-    disconnectWallet();
-    toast({
-      title: "Wallet Disconnected",
-      description: "Your wallet has been disconnected.",
-      variant: "destructive",
-    });
-  };
 
   const handleConnectWallet = async () => {
     try {
@@ -48,7 +38,7 @@ export default function Component() {
           Welcome to SmartWallet
         </h1>
         {isConnected ? (
-          <Link href={"/dashboard"}>
+          <Link href="/dashboard">
             <Button>Go to Dashboard</Button>
           </Link>
         ) : (

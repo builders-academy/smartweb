@@ -29,7 +29,7 @@ export default function SatsBalanceTable({ balances }: SatsBalanceTableProps) {
         </TableHeader>
         <TableBody>
           <TableRow className="hover:bg-gray-800 transition-colors">
-            <TableCell>{balances.total}</TableCell>
+            <TableCell>({balances.total})</TableCell>
             <TableCell>{balances.confirmed}</TableCell>
             <TableCell>{balances.unconfirmed}</TableCell>
           </TableRow>
