@@ -8,9 +8,10 @@ import {
   CoinsIcon,
   LayersIcon,
   WalletIcon,
+  MessageCircle,
 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useConnectWalletSats } from "@/helpers/connect";
 import WalletDataTable from "./WalletDataTable";
 import BalanceCard from "./BalanceCard";
@@ -22,6 +23,9 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import Chat from "@/components/main/Chat";
 import ImageGrid from "@/components/main/ImageGrid";
+import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 interface ModalProps {
   isOpen: boolean;
@@ -33,26 +37,84 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div
-        className="bg-black text-white p-6 rounded-lg max-w-lg w-full"
-        style={{
-          boxShadow: "0 0 20px 3px rgb(247 147 26)",
-        }}
-      >
-        <div className="flex justify-end">
-          <button
-            onClick={onClose}
-            className="text-black-400 hover:text-black-200"
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+          onClick={onClose}
+        >
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            transition={{ type: "spring", damping: 15 }}
+            className="bg-black text-white p-6 rounded-lg w-[80vw] h-[80vh] overflow-hidden flex flex-col"
+            style={{
+              boxShadow: "0 0 20px 3px rgb(247,147,26)",
+            }}
+            onClick={(e) => e.stopPropagation()}
           >
-            &times;
-          </button>
-        </div>
-        {children}
-      </div>
-    </div>
+            <div className="flex justify-end mb-4">
+              <button
+                onClick={onClose}
+                className="text-gray-400 hover:text-gray-200 transition-colors"
+              >
+                &times;
+              </button>
+            </div>
+            <div className="flex-grow overflow-auto">{children}</div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
+
+const Message = ({ content }: { content: string }) => (
+  <ReactMarkdown
+    rehypePlugins={[rehypeRaw]}
+    components={{
+      a: ({ node, ...props }) => (
+        <a className="text-blue-500 hover:underline" {...props} />
+      ),
+      p: ({ node, ...props }) => <p className="mb-2" {...props} />,
+      ul: ({ node, ...props }) => (
+        <ul className="list-disc pl-4 mb-2" {...props} />
+      ),
+      ol: ({ node, ...props }) => (
+        <ol className="list-decimal pl-4 mb-2" {...props} />
+      ),
+      h1: ({ node, ...props }) => (
+        <h1 className="text-2xl font-bold mb-2" {...props} />
+      ),
+      h2: ({ node, ...props }) => (
+        <h2 className="text-xl font-bold mb-2" {...props} />
+      ),
+      h3: ({ node, ...props }) => (
+        <h3 className="text-lg font-bold mb-2" {...props} />
+      ),
+      code: ({ node, ...props }) => (
+        <pre className="bg-gray-200 rounded p-2 mb-2 overflow-x-auto">
+          <code {...props} />
+        </pre>
+      ),
+      table: ({ node, ...props }) => (
+        <table className="border-collapse table-auto w-full mb-2" {...props} />
+      ),
+      th: ({ node, ...props }) => (
+        <th className="border px-4 py-2 bg-gray-100" {...props} />
+      ),
+      td: ({ node, ...props }) => (
+        <td className="border px-4 py-2" {...props} />
+      ),
+    }}
+  >
+    {content}
+  </ReactMarkdown>
+);
 
 export default function Dashboard() {
   const {
@@ -73,6 +135,8 @@ export default function Dashboard() {
   const fetchInProgressRef = useRef(false);
   const fetchAttempts = useRef(0);
   const [hasFetched, setHasFetched] = useState(false);
+
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -100,6 +164,10 @@ export default function Dashboard() {
   const closeModal = () => {
     setIsModalOpen(false);
     setModalContent(null);
+  };
+
+  const toggleChat = () => {
+    setIsChatOpen(!isChatOpen);
   };
 
   const memoizedFetchAiRecommendations = useCallback(async () => {
@@ -151,6 +219,18 @@ export default function Dashboard() {
       fetchAttempts.current = 0;
     }
   }, [isConnected]);
+
+  useEffect(() => {
+    if (isChatOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isChatOpen]);
 
   return (
     <div className="min-h-screen bg-black-900 text-black-100">
@@ -235,7 +315,23 @@ export default function Dashboard() {
                   </div>
                 </div>
                 <ImageGrid />
-                <Chat />
+                <Card
+                  className="w-full shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer"
+                  onClick={toggleChat}
+                >
+                  <CardHeader>
+                    <CardTitle className="flex items-center">
+                      <MessageCircle className="mr-2 h-5 w-5 text-[rgb(247,147,26)]" />
+                      Chat with AI Assistant
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-gray-500">
+                      Click to open the chat interface and get assistance with
+                      your crypto-related questions.
+                    </p>
+                  </CardContent>
+                </Card>
               </div>
               <div>
                 <AiRecommendations
@@ -249,6 +345,10 @@ export default function Dashboard() {
 
         <Modal isOpen={isModalOpen} onClose={closeModal}>
           {modalContent}
+        </Modal>
+
+        <Modal isOpen={isChatOpen} onClose={toggleChat}>
+          <Chat />
         </Modal>
       </main>
     </div>
