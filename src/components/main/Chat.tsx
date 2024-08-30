@@ -1,5 +1,5 @@
 "use client";
-import Message from "@/helpers/chatconversion";
+import Message from "@/helpers/chatConversion";
 import { useState, useRef, useEffect } from "react";
 import { useChat } from "ai/react";
 import Link from "next/link";
@@ -15,7 +15,7 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { LayoutDashboard, Wallet, Send } from "lucide-react";
+import { Send } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useRouter } from "next/navigation";
 import NetworkBackground from "@/helpers/ConnectBG";

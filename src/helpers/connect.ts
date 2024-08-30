@@ -107,18 +107,26 @@ export const useConnectWalletSats = () => {
       const liquidityAgentExecutor = await liquidityAgent();
 
       const [swapResponse, liquidityResponse] = await Promise.all([
-        swapAgentExecutor(`I have the following assets:
-        ${JSON.stringify(balances.stx.stx)} micro STX, ${JSON.stringify(
-          balances.stx.fungible_tokens
-        )}, ${JSON.stringify(balances.stx.non_fungible_tokens)} 
-        Given my current assets and the swap options available on Alex, which swap would be the most beneficial for me to maximize my returns or achieve the best outcome based on the current market rates and swap fees?
-        Please provide a detailed analysis considering potential profit, fees, and any other factors that might affect the decision.`),
-        liquidityAgentExecutor(`I have the following assets:
-        ${JSON.stringify(balances.stx.stx)} STX, ${JSON.stringify(
-          balances.stx.fungible_tokens
-        )}, ${JSON.stringify(balances.stx.non_fungible_tokens)} 
-        Given my current assets and the liquidity options available on Alex, what are the best liquidity provision strategies for me to maximize returns while minimizing risks?
-        Please provide a detailed analysis considering potential earnings, impermanent loss, and other relevant factors.`),
+        swapAgentExecutor(
+          `I have the following assets:
+          ${(parseInt(JSON.stringify(balances.stx.stx)) / 1000000).toFixed(
+            6
+          )} STX,
+          ${JSON.stringify(balances.stx.fungible_tokens)},
+          ${JSON.stringify(balances.stx.non_fungible_tokens)}
+          Given my current assets and the swap options available on Alex, which swap would be the most beneficial for me to maximize my returns or achieve the best outcome based on the current market rates and swap fees?
+          Please provide a detailed analysis considering potential profit, fees, and any other factors that might affect the decision.`
+        ),
+        liquidityAgentExecutor(
+          `I have the following assets:
+           ${(parseInt(JSON.stringify(balances.stx.stx)) / 1000000).toFixed(
+             6
+           )} STX,
+            ${JSON.stringify(balances.stx.fungible_tokens)},
+            ${JSON.stringify(balances.stx.non_fungible_tokens)}
+            Given my current assets and the liquidity options available on Alex, what are the best liquidity provision strategies for me to maximize returns while minimizing risks?
+            Please provide a detailed analysis considering potential earnings, impermanent loss, and other relevant factors.`
+        ),
       ]);
 
       setAiRecommendations({

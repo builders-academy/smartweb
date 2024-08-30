@@ -12,7 +12,7 @@ async function fetchAllSwaps() {
 
 export async function swapAgent(
   modelName: string = "gpt-4o"
-): Promise<(input: string) => Promise<{ recommendations: string[] }>> {
+): Promise<(input: string) => Promise<{ recommendations: string }>> {
   const llm = new ChatOpenAI({
     model: modelName,
     temperature: 0.3,
@@ -22,21 +22,35 @@ export async function swapAgent(
 
   const outputSchema = z.object({
     recommendations: z
-      .array(z.string())
-      .describe("List of 5 recommendation points for swapping in ALEX."),
+      .string()
+      .describe("Markdown-formatted string containing 5 swap recommendations"),
   });
 
   const parser = StructuredOutputParser.fromZodSchema(outputSchema);
 
   const promptTemplate = ChatPromptTemplate.fromTemplate(`
-    You are Swapping analysis agent that provides insights about swap options. You should analyze the swapping functionality on the ALEX decentralized exchange, focusing on the user experience and transaction settings. Detail the process of selecting base and quoted tokens, adjusting slippage tolerance, and understanding liquidity provider fees. Evaluate the importance of transaction confirmation steps, including the overview of the swap route and final confirmation through smart contracts. Provide insights on the expected transaction times due to the reliance on Stacks smart contracts and Bitcoin block speeds, and suggest best practices for users to optimize their swapping experience while minimizing risks associated with slippage and transaction fees.
+    You are a Swap Analysis Agent that provides personalized insights and recommendations for token swaps on the ALEX decentralized exchange. Your task is to analyze the user's provided wallet balance and the available swap options to suggest the most beneficial trades.
 
-    Current user input: {input}
-
-    All available swaps in Alex:
+    Current user input (including wallet balance): {input}
+    All available swaps on ALEX:
     {allSwaps}
 
-    Provide 5 concise recommendation points in markdown based on the user's input and the available swap options.
+    Based on the user's input (including their wallet balance) and available swap options, provide 5 swap recommendations in the following Markdown format:
+
+    # Swap Recommendations
+
+    ## 1. [Token From] to [Token To]
+
+    - **Pair**: [Token From]/[Token To]
+    - **Est. Returns**: [Amount From] ≈ [Amount To]
+    - **Why**: [Brief reason for the swap]
+    - **Action**: [Swap on ALEX](https://app.alexlab.co/swap)
+
+    [Repeat the above structure for recommendations 2-5]
+
+    > **Note**: ALEX offers benefits such as competitive rates, high liquidity, and a user-friendly interface. Always conduct your own research before making trading decisions.
+
+    Ensure each recommendation is concise, informative, and tailored to the user's input. Consider factors such as potential returns, liquidity, slippage, and relevant market trends. If the user hasn't provided sufficient balance information, kindly ask for more details to provide more accurate recommendations.
 
     {format_instructions}
   `);

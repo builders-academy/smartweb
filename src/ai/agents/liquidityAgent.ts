@@ -12,7 +12,7 @@ async function fetchLiquidity() {
 
 export async function liquidityAgent(
   modelName: string = "gpt-4o"
-): Promise<(input: string) => Promise<{ recommendations: string[] }>> {
+): Promise<(input: string) => Promise<{ recommendations: string }>> {
   const llm = new ChatOpenAI({
     model: modelName,
     temperature: 0.3,
@@ -24,22 +24,38 @@ export async function liquidityAgent(
 
   const outputSchema = z.object({
     recommendations: z
-      .array(z.string())
-      .describe("List of 5 recommendation points for liquidity in ALEX."),
+      .string()
+      .describe(
+        "Markdown-formatted string containing 5 liquidity pool recommendations"
+      ),
   });
 
   const parser = StructuredOutputParser.fromZodSchema(outputSchema);
 
   const promptTemplate = ChatPromptTemplate.fromTemplate(`
-    You are Liquidity analysis agent that provides insights about liquidity options.Analyze the liquidity pools available on the ALEX decentralized exchange, focusing on key metrics such as trading volume, fee structures, and token pair volatility. Evaluate the potential earnings from transaction fees for liquidity providers and assess the risks, including impermanent loss and smart contract vulnerabilities. Compare the performance of various liquidity pools, particularly the STX/ALEX pool and any newly listed pools, against industry benchmarks. Provide insights on which pools may offer the best return on investment for liquidity providers and suggest strategies for maximizing earnings while minimizing risks in the current market conditions.
+    You are a Liquidity Analysis Agent that provides personalized insights and recommendations for liquidity provision on the ALEX decentralized exchange. Your task is to analyze the user's input and the available liquidity options to suggest the most beneficial strategies for providing liquidity.
 
-    Current user input: {input}
-
-    All available liquidity options in Alex:
+    Current user input (including any relevant balance or preference information): {input}
+    All available liquidity options on ALEX:
     {allLiquidity}
 
-    Provide 5 concise recommendation points in markdown based on the user's input and the available liquidity options.
+    Based on the user's input and available liquidity options, provide 5 liquidity pool recommendations in the following Markdown format:
 
+    # Liquidity Pool Recommendations
+
+    ## 1. Pool Token [X] (Price: [Y])
+
+    - **Est. Returns**: [Brief description of APY]
+    - **Risk**: [Brief risk assessment]
+    - **Market Fit**: [Suitable market conditions]
+    - **Why**: [Short explanation]
+    - **Action**: [Provide liquidity on ALEX](https://app.alexlab.co/pool)
+
+    [Repeat the above structure for recommendations 2-5]
+
+    > **Note**: Remember to diversify your liquidity provision and manage risks. Always conduct your own research before making investment decisions.
+
+    Ensure each recommendation is concise, informative, and tailored to the user's input. If the user hasn't provided sufficient information, kindly ask for more details to provide more accurate recommendations.
 
     {format_instructions}
   `);
