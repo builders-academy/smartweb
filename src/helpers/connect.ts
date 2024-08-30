@@ -85,7 +85,7 @@ export const useConnectWalletSats = () => {
         await fetchBalances(data.result);
         setIsInitialized(true);
 
-        Cookies.set("wallet_connected", "true", { expires: 1 / 24 });
+        Cookies.set("wallet_connected", "true");
 
         return { status: "success", result: data.result };
       } else {
