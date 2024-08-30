@@ -2,30 +2,33 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
-  // Get the pathname of the request (e.g. /, /dashboard, /Chat)
   const path = request.nextUrl.pathname;
-
-  // Define protected routes
   const protectedRoutes = ["/dashboard", "/Chat"];
-
-  // Check if the path is a protected route
   const isProtectedRoute = protectedRoutes.some((route) =>
     path.startsWith(route)
   );
-
-  // Get the token from local storage (you might need to adjust this based on how you're storing the connection state)
   const isConnected = request.cookies.get("wallet_connected")?.value === "true";
 
-  // If it's a protected route and the user is not connected, redirect to the home page
+  // Redirect to /dashboard if wallet is connected and path is /
+  if (isConnected && path === "/") {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
+  }
+
+  // Redirect to / if trying to access protected route without connection
   if (isProtectedRoute && !isConnected) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
-  // If it's not a protected route or the user is connected, continue with the request
+  // Allow access to protected routes if connected
+  if (isProtectedRoute && isConnected) {
+    return NextResponse.next();
+  }
+
+  // For all other cases, proceed with the request
   return NextResponse.next();
 }
 
-// Specify the paths for which this middleware will run
+// Update the matcher to include the root path
 export const config = {
-  matcher: ["/dashboard", "/Chat", "/dashboard/:path*", "/Chat/:path*"],
+  matcher: ["/", "/dashboard", "/Chat", "/dashboard/:path*", "/Chat/:path*"],
 };
