@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Wallet, { AddressPurpose, request } from "sats-connect";
 import { useLocalStorage } from "@/hooks";
 import { swapAgent } from "@/ai/agents/swapAgent";
@@ -15,6 +15,7 @@ export const useConnectWalletSats = () => {
     null
   );
   const [isInitialized, setIsInitialized] = useState(false);
+  const hasFetchedRecommendations = useRef(false);
 
   const fetchBalances = useCallback(
     async (currentWalletData = walletData) => {
@@ -97,14 +98,12 @@ export const useConnectWalletSats = () => {
   };
 
   const fetchAiRecommendations = useCallback(async () => {
-    if (!balances.stx) {
-      console.error("STX balance not available");
+    if (!balances.stx || hasFetchedRecommendations.current) {
       return;
     }
 
     try {
       const swapAgentExecutor = await swapAgent();
-
       const liquidityAgentExecutor = await liquidityAgent();
 
       const [swapResponse, liquidityResponse] = await Promise.all([
@@ -126,6 +125,8 @@ export const useConnectWalletSats = () => {
         swapRecommendations: swapResponse.recommendations,
         liquidityRecommendations: liquidityResponse.recommendations,
       });
+
+      hasFetchedRecommendations.current = true;
     } catch (error) {
       console.error("Error fetching AI recommendations:", error);
     }
@@ -137,6 +138,7 @@ export const useConnectWalletSats = () => {
     setBalances({});
     setAiRecommendations(null);
     setIsInitialized(false);
+    hasFetchedRecommendations.current = false;
 
     localStorage.removeItem("walletData");
     localStorage.removeItem("balances");

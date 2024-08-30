@@ -1,5 +1,6 @@
 "use client";
-import React, { useState, useEffect } from "react";
+
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   AlertCircle,
@@ -69,6 +70,9 @@ export default function Dashboard() {
   const [isLoadingRecommendations, setIsLoadingRecommendations] =
     useState(false);
   const router = useRouter();
+  const fetchInProgressRef = useRef(false);
+  const fetchAttempts = useRef(0);
+  const [hasFetched, setHasFetched] = useState(false);
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -98,21 +102,55 @@ export default function Dashboard() {
     setModalContent(null);
   };
 
-  useEffect(() => {
-    const fetchRecommendations = async () => {
-      if (isConnected && !aiRecommendations) {
-        setIsLoadingRecommendations(true);
+  const memoizedFetchAiRecommendations = useCallback(async () => {
+    if (isConnected && !fetchInProgressRef.current && !aiRecommendations) {
+      fetchAttempts.current += 1;
+      fetchInProgressRef.current = true;
+      setIsLoadingRecommendations(true);
+
+      try {
         await fetchAiRecommendations();
-        setIsLoadingRecommendations(false);
         toast({
           title: "AI Recommendations Updated",
           description: "Your AI recommendations have been fetched and updated.",
         });
+      } catch (error) {
+        toast({
+          title: "Error",
+          description:
+            "Failed to fetch AI recommendations. Please try again later.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoadingRecommendations(false);
+        fetchInProgressRef.current = false;
       }
-    };
+    }
+  }, [isConnected, fetchAiRecommendations, aiRecommendations, toast]);
 
-    fetchRecommendations();
-  }, [isConnected, aiRecommendations, fetchAiRecommendations]);
+  useEffect(() => {
+    if (
+      isConnected &&
+      !hasFetched &&
+      !fetchInProgressRef.current &&
+      !aiRecommendations
+    ) {
+      setHasFetched(true);
+      memoizedFetchAiRecommendations();
+    }
+  }, [
+    isConnected,
+    aiRecommendations,
+    memoizedFetchAiRecommendations,
+    hasFetched,
+  ]);
+
+  useEffect(() => {
+    if (!isConnected) {
+      fetchInProgressRef.current = false;
+      fetchAttempts.current = 0;
+    }
+  }, [isConnected]);
 
   return (
     <div className="min-h-screen bg-black-900 text-black-100">
@@ -129,7 +167,7 @@ export default function Dashboard() {
           <div className="flex gap-2">
             <div className="flex gap-3">
               <BalanceCard
-                title="BitCoin Holdings"
+                title="Bitcoin Holdings"
                 icon={
                   <BitcoinIcon className="h-4 w-6 text-[rgb(247,147,26)]" />
                 }
@@ -199,7 +237,7 @@ export default function Dashboard() {
                 <ImageGrid />
                 <Chat />
               </div>
-              <div className="">
+              <div>
                 <AiRecommendations
                   recommendations={aiRecommendations}
                   isLoading={isLoadingRecommendations}
