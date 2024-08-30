@@ -6,6 +6,7 @@ import { useConnectWalletSats } from "@/helpers/connect";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { useEffect } from "react";
+import Cookies from "js-cookie";
 
 export default function Component() {
   const { toast } = useToast();
@@ -14,14 +15,16 @@ export default function Component() {
 
   useEffect(() => {
     // Redirect to /dashboard if wallet is already connected
-    if (isConnected) {
+    const walletConnected = Cookies.get("wallet_connected");
+    if (walletConnected === "true") {
       router.push("/dashboard");
     }
-  }, [isConnected, router]);
+  }, [router]);
 
   const handleConnectWallet = async () => {
     try {
       await connectWallet();
+      Cookies.set("wallet_connected", "true");
       router.push("/dashboard");
       toast({
         title: "Wallet Connected",
@@ -46,9 +49,7 @@ export default function Component() {
         </h1>
         {!isConnected ? (
           <Button onClick={handleConnectWallet}>Connect Wallet</Button>
-        ) : (
-          <Button disabled>Redirecting you to dashboard.......</Button>
-        )}
+        ) : null}
       </div>
     </div>
   );
