@@ -5,12 +5,19 @@ import { useRouter } from "next/navigation";
 import { useConnectWalletSats } from "@/helpers/connect";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { useEffect } from "react";
 
 export default function Component() {
   const { toast } = useToast();
   const { isConnected, connectWallet } = useConnectWalletSats();
   const router = useRouter();
+
+  useEffect(() => {
+    // Redirect to /dashboard if wallet is already connected
+    if (isConnected) {
+      router.push("/dashboard");
+    }
+  }, [isConnected, router]);
 
   const handleConnectWallet = async () => {
     try {
@@ -37,12 +44,10 @@ export default function Component() {
         <h1 className="text-4xl font-bold text-white mb-8">
           Welcome to SmartWallet
         </h1>
-        {isConnected ? (
-          <Link href="/dashboard">
-            <Button>Redirecting you to dashboard.......</Button>
-          </Link>
-        ) : (
+        {!isConnected ? (
           <Button onClick={handleConnectWallet}>Connect Wallet</Button>
+        ) : (
+          <Button disabled>Redirecting you to dashboard.......</Button>
         )}
       </div>
     </div>
