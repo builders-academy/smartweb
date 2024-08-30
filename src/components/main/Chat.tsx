@@ -125,11 +125,6 @@ export default function ChatComponent() {
 
   return (
     <div className="flex flex-col h-full">
-      <CardHeader className="flex-shrink-0 border-b border-gray-700">
-        <CardTitle className="text-2xl font-bold text-[rgb(247,147,26)]">
-          Chat with AI Assistant
-        </CardTitle>
-      </CardHeader>
       <CardContent className="flex-grow overflow-hidden p-4">
         <ScrollArea className="h-full pr-4" ref={scrollAreaRef}>
           {isConnected ? (
