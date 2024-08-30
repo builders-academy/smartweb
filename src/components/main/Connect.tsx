@@ -39,7 +39,7 @@ export default function Component() {
         </h1>
         {isConnected ? (
           <Link href="/dashboard">
-            <Button>Go to Dashboard</Button>
+            <Button>Redirecting you to dashboard.......</Button>
           </Link>
         ) : (
           <Button onClick={handleConnectWallet}>Connect Wallet</Button>
