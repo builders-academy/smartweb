@@ -201,9 +201,7 @@ export default function Dashboard() {
               <span className="text-[rgb(247,147,26)]">WALLET</span>
             </span>
           </h1>
-          <a href="https://forms.gle/EZcHXfXnAjGU5xb96" target="_blank">
-            <Button>Signup here to get early updates</Button>
-          </a>
+
           <div className="flex gap-2">
             <div className="flex gap-3">
               <BalanceCard

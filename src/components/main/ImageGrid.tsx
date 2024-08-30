@@ -1,4 +1,5 @@
 import React from "react";
+import { Button } from "../ui/button";
 
 const ImageGrid: React.FC = () => {
   const images = [
@@ -77,6 +78,11 @@ const ImageGrid: React.FC = () => {
             </div>
           </a>
         ))}
+      </div>
+      <div className="flex my-4 mx-9">
+        <a href="https://forms.gle/EZcHXfXnAjGU5xb96" target="_blank">
+          <Button>Signup here to get early updates</Button>
+        </a>
       </div>
     </div>
   );
