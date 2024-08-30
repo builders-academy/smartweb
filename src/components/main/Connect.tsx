@@ -24,7 +24,7 @@ export default function Component() {
   const handleConnectWallet = async () => {
     try {
       await connectWallet();
-      Cookies.set("wallet_connected", "true");
+      Cookies.set("wallet_connected", "true", { expires: 1 });
       router.push("/dashboard");
       toast({
         title: "Wallet Connected",
