@@ -7,7 +7,7 @@ const Loading = () => {
     <Alert className="flex h-[90vh] items-center justify-center flex-col">
       <Loader2 className="h-4 w-4 animate-spin" />
       <AlertTitle>Please wait</AlertTitle>
-      <AlertDescription>We're loading your content...</AlertDescription>
+      <AlertDescription>Loading...</AlertDescription>
     </Alert>
   );
 };
