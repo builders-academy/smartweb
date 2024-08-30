@@ -36,7 +36,7 @@ export async function swapAgent(
     All available swaps in Alex:
     {allSwaps}
 
-    Provide 5 concise recommendation points based on the user's input and the available swap options.
+    Provide 5 concise recommendation points in markdown based on the user's input and the available swap options.
 
     {format_instructions}
   `);

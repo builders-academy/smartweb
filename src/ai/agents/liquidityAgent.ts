@@ -38,7 +38,7 @@ export async function liquidityAgent(
     All available liquidity options in Alex:
     {allLiquidity}
 
-    Provide 5 concise recommendation points based on the user's input and the available liquidity options.
+    Provide 5 concise recommendation points in markdown based on the user's input and the available liquidity options.
 
 
     {format_instructions}

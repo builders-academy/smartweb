@@ -21,6 +21,11 @@ export default function StxBalanceTable({ balances }: StxBalanceTableProps) {
     );
   }
 
+  // Helper function to format balance by dividing by 100,000
+  const formatBalance = (value: number | undefined) => {
+    return value ? (value / 100000).toFixed(2) : "0.00";
+  };
+
   return (
     <div className="space-y-4 h-[600px] overflow-y-auto p-4 bg-black text-gray-200">
       <Table className="w-full border border-gray-700 rounded-lg overflow-hidden">
@@ -37,9 +42,9 @@ export default function StxBalanceTable({ balances }: StxBalanceTableProps) {
         <TableBody>
           <TableRow className="hover:bg-gray-800 transition-colors">
             <TableCell className="font-medium">STX</TableCell>
-            <TableCell>{balances.stx?.balance}</TableCell>
-            <TableCell>{balances.stx?.total_sent}</TableCell>
-            <TableCell>{balances.stx?.total_received}</TableCell>
+            <TableCell>{formatBalance(balances.stx?.balance)}</TableCell>
+            <TableCell>{formatBalance(balances.stx?.total_sent)}</TableCell>
+            <TableCell>{formatBalance(balances.stx?.total_received)}</TableCell>
           </TableRow>
         </TableBody>
       </Table>
@@ -68,9 +73,9 @@ export default function StxBalanceTable({ balances }: StxBalanceTableProps) {
                 <TableCell className="font-medium">
                   {token.split("::")[1]}
                 </TableCell>
-                <TableCell>{data?.balance}</TableCell>
-                <TableCell>{data?.total_sent}</TableCell>
-                <TableCell>{data?.total_received}</TableCell>
+                <TableCell>{formatBalance(data?.balance)}</TableCell>
+                <TableCell>{formatBalance(data?.total_sent)}</TableCell>
+                <TableCell>{formatBalance(data?.total_received)}</TableCell>
               </TableRow>
             )
           )}
@@ -102,8 +107,8 @@ export default function StxBalanceTable({ balances }: StxBalanceTableProps) {
                   {token.split("::")[1]}
                 </TableCell>
                 <TableCell>{data?.count}</TableCell>
-                <TableCell>{data?.total_sent}</TableCell>
-                <TableCell>{data?.total_received}</TableCell>
+                <TableCell>{formatBalance(data?.total_sent)}</TableCell>
+                <TableCell>{formatBalance(data?.total_received)}</TableCell>
               </TableRow>
             )
           )}
